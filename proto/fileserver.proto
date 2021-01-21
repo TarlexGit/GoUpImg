@@ -1,0 +1,40 @@
+syntax = "proto3"; 
+
+package proto; 
+ 
+message Empty { 
+} 
+
+message Chunk {
+  bytes Content = 1;
+}
+
+message FileName {
+  string name = 1;
+}
+
+message FileInfo {
+  string name = 1;
+  int64 size = 2;
+  int64 create = 3;
+}
+
+message FileInfoResponse {
+  repeated FileInfo files = 1;
+}
+
+enum StatusCode {
+  Unknown = 0;
+  Ok = 1;
+  Failed = 2;
+}
+
+message Status {
+  StatusCode Code = 1;
+}
+   
+service Greeter { 
+  rpc List (Empty) returns (FileInfoResponse) {}
+  rpc Upload (stream Chunk) returns (Status) {}
+  rpc Download (FileName) returns (stream Chunk) {}
+}
